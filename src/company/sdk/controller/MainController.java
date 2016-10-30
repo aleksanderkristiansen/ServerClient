@@ -18,18 +18,6 @@ public class MainController {
 
     public void run() throws IOException {
 
-        System.out.println("Brugernavn");
-
-        String username = sc.next();
-
-        System.out.println("Adgangskode");
-
-        String password = sc.next();
-
-        //String token = uc.getAuth(username, password);
-
-        //if (!token.isEmpty()){
-
             System.out.println("Velkommen til Bookit" +
                     "\nHvad vil du?" +
                     "\n1: Find pensumliste" +
@@ -44,19 +32,48 @@ public class MainController {
 
                     break;
 
-                case 2: System.out.println(bc.getBook(1).getTitle());
+                case 2: login();
                     break;
 
                 default: findCurriculum();
                     break;
             }
 
+    }
 
+    public void login() throws IOException{
+        System.out.println("Brugernavn");
 
+        String username = sc.next();
 
-        //}
+        System.out.println("Adgangskode");
 
+        String password = sc.next();
 
+        String token = uc.getAuth(username, password);
+
+        if (token != null){
+            System.out.println("Velkommen til Bookit" +
+                    "\nHvad vil du?" +
+                    "\n1: Find pensumliste" +
+                    "\n2: Log ind" +
+                    "\n3: Log ud");
+
+            int i = sc.nextInt();
+
+            switch (i){
+
+                case 1: System.out.print("hej");
+
+                    break;
+
+                case 2: System.out.print("hej");
+                    break;
+
+                default: System.out.print("hej");
+                    break;
+            }
+        }
 
 
     }

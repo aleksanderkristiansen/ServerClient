@@ -28,6 +28,8 @@ public class CurriculumController {
 
         BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
 
+        ServerConnection.conn.disconnect();
+
         StringBuilder builder = new StringBuilder();
         String aux = "";
 
@@ -59,6 +61,8 @@ public class CurriculumController {
         ServerConnection.openServerConnection(path, httpMetode);
 
         BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
+
+        ServerConnection.conn.disconnect();
 
         StringBuilder builder = new StringBuilder();
         String aux = "";
