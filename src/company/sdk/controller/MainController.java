@@ -41,7 +41,7 @@ public class MainController {
 
                     break;
 
-                case 2: System.out.println("Adgangskode");;
+                case 2: System.out.println(bc.getBook(1).getTitle());
                     break;
 
                 default: System.out.println("Adgangskode");;

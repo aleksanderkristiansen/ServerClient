@@ -1,5 +1,6 @@
 package company.sdk.controller;
 
+import com.google.gson.stream.JsonReader;
 import company.sdk.Encrypters.Crypter;
 import company.sdk.ServerConnection;
 import company.sdk.model.Book;
@@ -9,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -27,54 +29,28 @@ public class BookController {
 
         BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
 
-        System.out.print(br);
+        StringBuilder builder = new StringBuilder();
+        String aux = "";
 
-        String test = br.toString();
+        while ((aux = br.readLine()) != null) {
+            builder.append(aux + "\n");
+        }
 
-        System.out.print(test);
+        String text = builder.toString();
 
-        String decrypt = Crypter.encryptDecryptXOR(test);
-
-        Gson gson1 = new Gson();
-
-        String bla = gson1.toJson(decrypt);
-
-
-
+        String decrypt = Crypter.encryptDecryptXOR(text);
 
         Gson gson = new Gson();
 
+        JsonReader reader = new JsonReader(new StringReader(decrypt));
 
-//        System.out.print(decrypt);
+        reader.setLenient(true);
 
-//        System.out.print(test);
+        Type type = new TypeToken<ArrayList<Book>>() {}.getType();
 
+        ArrayList<Book> yourList = gson.fromJson(reader, type);
 
-
-        //   Book[] navigationArray = gson.fromJson(br, Book[].class);                    ß
-
-        //       System.out.print(navigationArray.);
-
-        //      logger.info(navigationArray);
-
-        //     assertEquals(4, navigationArray.length);
-
-        // or
-
-        @SuppressWarnings("serial")
-        Type collectionType = new TypeToken<ArrayList<Book>>() {
-        }.getType();
-        ArrayList<Book> books = gson.fromJson(bla, collectionType);
-//
-//        logger.info(navigation);
-//
-//        assertEquals(4, navigation.size());
-
-
-
-        ServerConnection.conn.disconnect();
-
-        return books;
+        return yourList;
     }
 
     public Book getBook(int id) throws IOException {
@@ -85,13 +61,23 @@ public class BookController {
 
         BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
 
-        String test = br.toString();
+        StringBuilder builder = new StringBuilder();
+        String aux = "";
 
-        String decrypt = Crypter.encryptDecryptXOR(test);
+        while ((aux = br.readLine()) != null) {
+            builder.append(aux + "\n");
+        }
+
+        String text = builder.toString();
+
+        String decrypt = Crypter.encryptDecryptXOR(text);
 
         Gson gson = new Gson();
 
-        Book book = gson.fromJson(decrypt, Book.class);
+        JsonReader reader = new JsonReader(new StringReader(decrypt));
+        reader.setLenient(true);
+
+        Book book = gson.fromJson(reader, Book.class);
 
         ServerConnection.conn.disconnect();
 
