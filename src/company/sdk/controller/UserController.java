@@ -1,14 +1,17 @@
 package company.sdk.controller;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import company.sdk.Encrypters.Crypter;
 import company.sdk.ServerConnection;
 import com.google.gson.Gson;
+import company.sdk.model.Book;
 import company.sdk.model.User;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by aleksanderkristiansen on 24/10/2016.
@@ -43,8 +46,78 @@ public class UserController {
         ServerConnection.conn.disconnect();
 
 
-
         return auth;
+    }
+
+    public ArrayList<User> getAllUsers(String token) throws IOException{
+
+        String path = "user";
+        String httpMetode = "GET";
+
+        ServerConnection.openServerConnection(path, httpMetode);
+
+        ServerConnection.conn.addRequestProperty("authorization", token);
+
+        BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
+
+        StringBuilder builder = new StringBuilder();
+        String aux = "";
+
+        while ((aux = br.readLine()) != null) {
+            builder.append(aux + "\n");
+        }
+
+        String text = builder.toString();
+
+
+
+        String decrypt = Crypter.encryptDecryptXOR(text);
+
+        Gson gson = new Gson();
+
+        JsonReader reader = new JsonReader(new StringReader(decrypt));
+
+        reader.setLenient(true);
+
+        Type type = new TypeToken<ArrayList<User>>() {}.getType();
+
+        ArrayList<User> getAllUsers = gson.fromJson(reader, type);
+
+        return getAllUsers;
+
+    }
+
+    public User getUser(String token, int id) throws IOException {
+        String path = "user/" + id;
+        String httpMetode = "GET";
+
+        ServerConnection.openServerConnection(path, httpMetode);
+
+        ServerConnection.conn.addRequestProperty("authorization", token);
+
+        BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
+
+        StringBuilder builder = new StringBuilder();
+        String aux = "";
+
+        while ((aux = br.readLine()) != null) {
+            builder.append(aux + "\n");
+        }
+
+        String text = builder.toString();
+
+        String decrypt = Crypter.encryptDecryptXOR(text);
+
+        Gson gson = new Gson();
+
+        JsonReader reader = new JsonReader(new StringReader(decrypt));
+        reader.setLenient(true);
+
+        User user = gson.fromJson(reader, User.class);
+
+        ServerConnection.conn.disconnect();
+
+        return user;
     }
 
 

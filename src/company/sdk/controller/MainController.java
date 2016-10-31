@@ -55,19 +55,19 @@ public class MainController {
         if (token != null){
             System.out.println("Velkommen til Bookit" +
                     "\nHvad vil du?" +
-                    "\n1: Find pensumliste" +
-                    "\n2: Log ind" +
+                    "\n1: Se all brugere" +
+                    "\n2: Ændre profiloplysninger" +
                     "\n3: Log ud");
 
             int i = sc.nextInt();
 
             switch (i){
 
-                case 1: System.out.print("hej");
+                case 1: getAllUsers(token);
 
                     break;
 
-                case 2: System.out.print("hej");
+                case 2: getUser(token);
                     break;
 
                 default: System.out.print("hej");
@@ -76,6 +76,21 @@ public class MainController {
         }
 
 
+    }
+
+    public void getAllUsers(String token) throws IOException {
+
+        for (int i = 0; i < uc.getAllUsers(token).size(); i++){
+            System.out.println(uc.getAllUsers(token).get(i).getEmail());
+        }
+    }
+
+    public void getUser(String token, int id) throws IOException {
+
+        System.out.println("Fornavn: " + uc.getUser(token, id).getFirstName()
+                + "\n" + "Efternavn:" + uc.getUser(token, id).getLastName()
+                + "\n" + "Brugernavn: " + uc.getUser(token, id).getUsername()
+                + "\n" + "Email : " + uc.getUser(token, id).getEmail());
     }
 
     public void findCurriculum() throws IOException {
