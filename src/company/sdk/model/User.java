@@ -2,22 +2,22 @@ package company.sdk.model;
 
 public class User {
     int userID;
-    String firstName, lastName, username, email, password;
+    String firstName, lastName, userName, email, password;
     Boolean userType;
 
     public User(){
 
     }
 
-    public User(String username, String password){
-        this.username = username;
+    public User(String userName, String password){
+        this.userName = userName;
         this.password = password;
     }
 
     public User(String firstName, String lastName, String userName, String email, String password, Boolean userType) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = userName;
+        this.userName = userName;
         this.email = email;
         this.password = password;
         this.userType = userType;
@@ -26,7 +26,7 @@ public class User {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = userName;
+        this.userName = userName;
         this.email = email;
         this.password = password;
         this.userType = userType;
@@ -56,12 +56,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {

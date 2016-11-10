@@ -28,8 +28,6 @@ public class CurriculumController {
 
         BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
 
-        ServerConnection.conn.disconnect();
-
         StringBuilder builder = new StringBuilder();
         String aux = "";
 
@@ -51,6 +49,8 @@ public class CurriculumController {
 
         ArrayList<Curriculum> curriculums = gson.fromJson(reader, type);
 
+        ServerConnection.conn.disconnect();
+
         return curriculums;
     }
 
@@ -61,8 +61,6 @@ public class CurriculumController {
         ServerConnection.openServerConnection(path, httpMetode);
 
         BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
-
-        ServerConnection.conn.disconnect();
 
         StringBuilder builder = new StringBuilder();
         String aux = "";
@@ -84,6 +82,8 @@ public class CurriculumController {
         Type type = new TypeToken<ArrayList<Book>>() {}.getType();
 
         ArrayList<Book> curriculumsBooks = gson.fromJson(reader, type);
+
+        ServerConnection.conn.disconnect();
 
         return curriculumsBooks;
     }

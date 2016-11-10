@@ -3,7 +3,6 @@ package company.sdk.controller;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
-import java.util.StringJoiner;
 
 /**
  * Created by aleksanderkristiansen on 24/10/2016.
@@ -89,7 +88,7 @@ public class MainController {
 
         System.out.println("Fornavn: " + uc.getUser(token, id).getFirstName()
                 + "\n" + "Efternavn:" + uc.getUser(token, id).getLastName()
-                + "\n" + "Brugernavn: " + uc.getUser(token, id).getUsername()
+                + "\n" + "Brugernavn: " + uc.getUser(token, id).getUserName()
                 + "\n" + "Email : " + uc.getUser(token, id).getEmail());
     }
 
@@ -149,13 +148,19 @@ public class MainController {
 
         int selectedSemester = sc.nextInt();
 
+        System.out.printf("%-7s %-55s %-70s %-20s\n", "Nr.",  "Book title:", "Book Author", "Book ISBN", "Book Publisher: ");
+
         for (int i = 0; i < cc.getAllCurriculums().size(); i++){
 
             if (cc.getAllCurriculums().get(i).getSchool().equals(schools.get(selectedSchool)) && cc.getAllCurriculums().get(i).getEducation().equals(educations.get(selectedEducation)) && cc.getAllCurriculums().get(i).getSemester() == semester.get(selectedSemester)){
-                System.out.print(cc.getAllCurriculums().get(i).getCurriculumID());
 
                 for (int j = 0; j < cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).size(); j++){
-                    System.out.println(cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle());
+                    System.out.println();
+                    System.out.println();
+
+
+
+                        System.out.printf("%-7d %-55s %-70s %-20.0f\n", j,  cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPublisher());
                 }
             }
         }
