@@ -20,7 +20,7 @@ public class ServerConnection {
     }
 
     public static void openServerConnection(String path, String httpMethod) throws IOException {
-        url = new URL("http://localhost:8080/server2_0_war_exploded/" + path);
+        url = new URL("http://localhost:8080/myServer_war_exploded/" + path);
         conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(httpMethod);
         conn.setRequestProperty("Accept", "application/json");

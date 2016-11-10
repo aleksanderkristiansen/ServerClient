@@ -67,7 +67,7 @@ public class MainController {
 
                     break;
 
-                case 2: getUser(token);
+                case 2: getUser(token, 1);
                     break;
 
                 default: System.out.print("hej");
