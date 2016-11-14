@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class UserController {
 
-    public String getAuth(String username, String password) throws IOException {
+    public String getAuth(String email, String password) throws IOException {
 
         String path = "user/login";
         String httpMetode = "POST";
@@ -27,7 +27,7 @@ public class UserController {
 
         Gson gson = new Gson();
 
-        User loginUser = new User(username, password);
+        User loginUser = new User(email, password);
 
         String jsonUser = gson.toJson(loginUser);
 

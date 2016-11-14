@@ -43,13 +43,13 @@ public class MainController {
     public void login() throws IOException{
         System.out.println("Brugernavn");
 
-        String username = sc.next();
+        String email = sc.next();
 
         System.out.println("Adgangskode");
 
         String password = sc.next();
 
-        String token = uc.getAuth(username, password);
+        String token = uc.getAuth(email, password);
 
         if (token != null){
             System.out.println("Velkommen til Bookit" +
@@ -88,7 +88,6 @@ public class MainController {
 
         System.out.println("Fornavn: " + uc.getUser(token, id).getFirstName()
                 + "\n" + "Efternavn:" + uc.getUser(token, id).getLastName()
-                + "\n" + "Brugernavn: " + uc.getUser(token, id).getUserName()
                 + "\n" + "Email : " + uc.getUser(token, id).getEmail());
     }
 
@@ -155,8 +154,21 @@ public class MainController {
             if (cc.getAllCurriculums().get(i).getSchool().equals(schools.get(selectedSchool)) && cc.getAllCurriculums().get(i).getEducation().equals(educations.get(selectedEducation)) && cc.getAllCurriculums().get(i).getSemester() == semester.get(selectedSemester)){
 
                 for (int j = 0; j < cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).size(); j++){
-                    System.out.println();
-                    System.out.println();
+
+                    String bookTitle = "";
+
+                    if (bookTitle == null){
+                        bookTitle = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle();
+                        String bookAuthor = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor();
+                        double isbn = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN();
+                    }else{
+
+                    }
+
+
+
+                    String bookAuthor;
+                    double isbnM;
 
 
 
