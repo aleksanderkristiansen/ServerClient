@@ -1,8 +1,10 @@
 package company.sdk.controller;
 
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
+import company.sdk.model.Book;
 
 /**
  * Created by aleksanderkristiansen on 24/10/2016.
@@ -149,32 +151,54 @@ public class MainController {
 
         System.out.printf("%-7s %-55s %-70s %-20s\n", "Nr.",  "Book title:", "Book Author", "Book ISBN", "Book Publisher: ");
 
+        ArrayList<Book> bookOfCurriculum = new ArrayList<>();
+
         for (int i = 0; i < cc.getAllCurriculums().size(); i++){
 
             if (cc.getAllCurriculums().get(i).getSchool().equals(schools.get(selectedSchool)) && cc.getAllCurriculums().get(i).getEducation().equals(educations.get(selectedEducation)) && cc.getAllCurriculums().get(i).getSemester() == semester.get(selectedSemester)){
 
                 for (int j = 0; j < cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).size(); j++){
 
-                    String bookTitle = "";
 
-                    if (bookTitle == null){
-                        bookTitle = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle();
-                        String bookAuthor = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor();
-                        double isbn = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN();
+
+                    String bookTitle = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle();
+
+                    String bookAuthor = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor();
+
+                    double isbn = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN();
+
+                    Book book = new Book(bookTitle, bookAuthor, isbn);
+
+                    if (bookOfCurriculum.isEmpty()){
+                        bookOfCurriculum.add(book);
                     }else{
+                        for (Book bookSearch: bookOfCurriculum ){
+                            if (bookSearch.getTitle().equals(bookTitle)){
 
+                                if (!bookSearch.getAuthor().contains(bookAuthor)){
+                                    bookAuthor = bookSearch.getAuthor() + " & " + bookAuthor;
+                                    bookSearch.setAuthor(bookAuthor);
+                                    break;
+                                }
+                                break;
+                            }
+                        }
                     }
 
 
 
-                    String bookAuthor;
-                    double isbnM;
+                        //System.out.printf("%-7d %-55s %-70s %-20.0f\n", j,  cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPublisher());
 
 
-
-                        System.out.printf("%-7d %-55s %-70s %-20.0f\n", j,  cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPublisher());
                 }
             }
+        }
+
+        int k =1;
+
+        for (Book bookPrint: bookOfCurriculum){
+            System.out.printf("%-7d %-55s %-70s %-20.0f\n", k,  bookPrint.getTitle(), bookPrint.getAuthor(), bookPrint.getISBN());
+            k++;
         }
 
 

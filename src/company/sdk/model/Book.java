@@ -35,6 +35,12 @@ public class Book {
         this.priceCDON = priceCDON;
     }
 
+    public Book(String title, String author, double ISBN){
+        this.title = title;
+        this.author = title;
+        this.ISBN = ISBN;
+    }
+
     public int getBookID() {
         return bookID;
     }
