@@ -2,7 +2,7 @@ package company.sdk.model;
 
 public class User {
     int userID;
-    String firstName, lastName, email, password;
+    String firstName, lastName, email, password, token;
     Boolean userType;
 
     public User(){
@@ -28,6 +28,15 @@ public class User {
         this.email = email;
         this.password = password;
         this.userType = userType;
+    }
+
+    public User(int userID, String firstName, String lastName, String email, Boolean userType, String token){
+        this.userID = userID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userType = userType;
+        this.token = token;
     }
 
     public int getUserID() {
@@ -68,6 +77,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Boolean getUserType() {

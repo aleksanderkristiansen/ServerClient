@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
 import company.sdk.model.Book;
+import company.sdk.model.User;
 
 /**
  * Created by aleksanderkristiansen on 24/10/2016.
@@ -51,31 +52,69 @@ public class MainController {
 
         String password = sc.next();
 
-        String token = uc.getAuth(email, password);
+        User currentUser = uc.getAuth(email, password);
 
-        if (token != null){
-            System.out.println("Velkommen til Bookit" +
-                    "\nHvad vil du?" +
-                    "\n1: Se all brugere" +
-                    "\n2: Ændre profiloplysninger" +
-                    "\n3: Log ud");
+        if (currentUser != null){
 
-            int i = sc.nextInt();
+            if (currentUser.getUserType()){
+                System.out.println("Velkommen til Bookit" +
+                        "\nDu er logget ind som administrator" +
+                        "\nHvad vil du?" +
+                        "\n1: Se din pensumliste" +
+                        "\n2: Ændre profiloplysninger" +
+                        "\n3: Log ud");
 
-            switch (i){
+                int i = sc.nextInt();
 
-                case 1: getAllUsers(token);
+                switch (i){
 
-                    break;
+                    case 1: getAllUsers(currentUser.getToken());
 
-                case 2: getUser(token, 1);
-                    break;
+                        break;
 
-                default: System.out.print("hej");
-                    break;
+                    case 2: getUser(currentUser.getToken(), 1);
+                        break;
+
+                    default: System.out.print("hej");
+                        break;
+                }
+
+            }else{
+                System.out.println("Velkommen til Bookit" +
+                        "\nHvad vil du?" +
+                        "\n1: Se din pensumliste" +
+                        "\n2: Ændre profiloplysninger" +
+                        "\n3: Log ud");
+
+                int i = sc.nextInt();
+
+                switch (i){
+
+                    case 1: String test3;
+
+                        break;
+
+                    case 2: String test;
+                        break;
+
+                    case 3: uc.logout(currentUser.getToken());
+                        break;
+
+                    default: String test2;
+                        break;
+                }
             }
+
+
+
+
+
         }
 
+
+    }
+
+    public void logout() throws IOException{
 
     }
 
@@ -149,7 +188,7 @@ public class MainController {
 
         int selectedSemester = sc.nextInt();
 
-        System.out.printf("%-7s %-55s %-70s %-20s\n", "Nr.",  "Book title:", "Book Author", "Book ISBN", "Book Publisher: ");
+        System.out.printf("%-7s %-55s %-70s %-20s %-55s %-20s\n", "Nr.",  "Book title:", "Book Author", "Book ISBN", "Book Publisher", "Cheapest price ");
 
         ArrayList<Book> bookOfCurriculum = new ArrayList<>();
 
@@ -167,12 +206,21 @@ public class MainController {
 
                     double isbn = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN();
 
-                    Book book = new Book(bookTitle, bookAuthor, isbn);
+                    double price = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPrice();
+
+                    String bookPublisher = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPublisher();
+
+                    Book book = new Book(bookTitle, bookAuthor, isbn, price, bookPublisher);
 
                     if (bookOfCurriculum.isEmpty()){
                         bookOfCurriculum.add(book);
                     }else{
                         for (Book bookSearch: bookOfCurriculum ){
+
+                            if (bookSearch.getPrice() > price){
+                                bookSearch.setPrice(price);
+                            }
+
                             if (bookSearch.getTitle().equals(bookTitle)){
 
                                 if (!bookSearch.getAuthor().contains(bookAuthor)){
@@ -197,7 +245,7 @@ public class MainController {
         int k =1;
 
         for (Book bookPrint: bookOfCurriculum){
-            System.out.printf("%-7d %-55s %-70s %-20.0f\n", k,  bookPrint.getTitle(), bookPrint.getAuthor(), bookPrint.getISBN());
+            System.out.printf("%-7d %-55s %-70s %-20.0f %-55s %-20.0f\n", k,  bookPrint.getTitle(), bookPrint.getAuthor(), bookPrint.getISBN(), bookPrint.getPublisher(), bookPrint.getPrice());
             k++;
         }
 

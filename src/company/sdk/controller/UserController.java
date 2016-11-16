@@ -18,7 +18,20 @@ import java.util.ArrayList;
  */
 public class UserController {
 
-    public String getAuth(String email, String password) throws IOException {
+    public void logout(String token) throws IOException {
+        String path = "user/login";
+        String httpMetode = "POST";
+
+        ServerConnection.openServerConnection(path, httpMetode);
+
+        OutputStreamWriter out = new OutputStreamWriter(ServerConnection.conn.getOutputStream());
+
+        out.write(token);
+
+        out.close();
+    }
+
+    public User getAuth(String email, String password) throws IOException {
 
         String path = "user/login";
         String httpMetode = "POST";
@@ -41,12 +54,25 @@ public class UserController {
 
         BufferedReader br = new BufferedReader(new InputStreamReader((ServerConnection.conn.getInputStream())));
 
-        String auth = br.readLine();
+        StringBuilder builder = new StringBuilder();
+        String aux = "";
+
+        while ((aux = br.readLine()) != null) {
+            builder.append(aux + "\n");
+        }
+
+        String text = builder.toString();
+
+        String decrypt = Crypter.encryptDecryptXOR(text);
+
+        JsonReader reader = new JsonReader(new StringReader(decrypt));
+        reader.setLenient(true);
+
+        User user = gson.fromJson(reader, User.class);
 
         ServerConnection.conn.disconnect();
 
-
-        return auth;
+        return user;
     }
 
     public ArrayList<User> getAllUsers(String token) throws IOException{
