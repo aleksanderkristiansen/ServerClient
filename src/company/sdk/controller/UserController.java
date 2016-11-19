@@ -19,16 +19,21 @@ import java.util.ArrayList;
 public class UserController {
 
     public void logout(String token) throws IOException {
-        String path = "user/login";
+        String path = "user/logout";
         String httpMetode = "POST";
 
         ServerConnection.openServerConnection(path, httpMetode);
+
+        ServerConnection.conn.setRequestProperty("Content-Type",
+                "text");
 
         OutputStreamWriter out = new OutputStreamWriter(ServerConnection.conn.getOutputStream());
 
         out.write(token);
 
         out.close();
+
+        ServerConnection.conn.disconnect();
     }
 
     public User getAuth(String email, String password) throws IOException {

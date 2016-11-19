@@ -97,7 +97,7 @@ public class MainController {
                     case 2: String test;
                         break;
 
-                    case 3: uc.logout(currentUser.getToken());
+                    case 3: logout(currentUser.getToken());
                         break;
 
                     default: String test2;
@@ -114,7 +114,14 @@ public class MainController {
 
     }
 
-    public void logout() throws IOException{
+    public void logout(String token) throws IOException{
+
+        System.out.print(token);
+
+        uc.logout(token);
+
+
+
 
     }
 
