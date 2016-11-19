@@ -24,17 +24,19 @@ public class MainController {
                     "\nHvad vil du?" +
                     "\n1: Find pensumliste" +
                     "\n2: Log ind" +
-                    "\n3: Log ud");
+                    "\n3: Opret bruger");
 
             int i = sc.nextInt();
 
             switch (i){
 
                 case 1: findCurriculum();
-
                     break;
 
                 case 2: login();
+                    break;
+
+                case 3: createUser();
                     break;
 
                 default: findCurriculum();
@@ -57,50 +59,65 @@ public class MainController {
         if (currentUser != null){
 
             if (currentUser.getUserType()){
-                System.out.println("Velkommen til Bookit" +
-                        "\nDu er logget ind som administrator" +
+                System.out.println("Du er logget ind som administrator" +
                         "\nHvad vil du?" +
-                        "\n1: Se din pensumliste" +
-                        "\n2: Ændre profiloplysninger" +
-                        "\n3: Log ud");
+                        "\n1: Se alle brugere" +
+                        "\n2: Slet en bruger" +
+                        "\n3: Opret en bruger" +
+                        "\n4: Opret en bog" +
+                        "\n5: Ændre profiloplysninger" +
+                        "\n6: Log ud");
 
                 int i = sc.nextInt();
 
                 switch (i){
 
                     case 1: getAllUsers(currentUser.getToken());
-
                         break;
 
-                    case 2: getUser(currentUser.getToken(), 1);
+                    case 2: deleteUser();
                         break;
 
-                    default: System.out.print("hej");
+                    case 3: createUser();
+                        break;
+
+                    case 4: createBook();
+                        break;
+
+                    case 5: changeUserProfile();
+                        break;
+
+                    case 6: logout(currentUser.getToken());
+                        break;
+
+                    default:
                         break;
                 }
 
             }else{
-                System.out.println("Velkommen til Bookit" +
+                System.out.println("Hej " + currentUser.getFirstName() +
                         "\nHvad vil du?" +
                         "\n1: Se din pensumliste" +
                         "\n2: Ændre profiloplysninger" +
-                        "\n3: Log ud");
+                        "\n3: Slet profil" +
+                        "\n4: Log ud");
 
                 int i = sc.nextInt();
 
                 switch (i){
 
-                    case 1: String test3;
-
+                    case 1: curriculumOfUser();
                         break;
 
-                    case 2: String test;
+                    case 2: changeUserProfile();
                         break;
 
-                    case 3: logout(currentUser.getToken());
+                    case 3: deleteUser();
                         break;
 
-                    default: String test2;
+                    case 4: logout(currentUser.getToken());
+
+                    default:
                         break;
                 }
             }
@@ -112,6 +129,22 @@ public class MainController {
         }
 
 
+    }
+
+    private void changeUserProfile() {
+    }
+
+    private void curriculumOfUser(){
+
+    }
+
+    private void createBook() {
+    }
+
+    private void createUser() {
+    }
+
+    private void deleteUser() {
     }
 
     public void logout(String token) throws IOException{
