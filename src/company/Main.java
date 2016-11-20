@@ -1,9 +1,6 @@
 package company;
 
-import company.sdk.ServerConnection;
-import company.sdk.controller.BookController;
-import company.sdk.controller.MainController;
-import company.sdk.controller.UserController;
+import company.controller.MainController;
 
 import java.io.IOException;
 

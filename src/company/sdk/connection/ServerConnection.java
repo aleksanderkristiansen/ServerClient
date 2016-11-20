@@ -1,4 +1,4 @@
-package company.sdk;
+package company.sdk.connection;
 
 
 import java.io.IOException;

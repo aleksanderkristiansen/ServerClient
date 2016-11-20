@@ -1,4 +1,4 @@
-package company.sdk.controller;
+package company.controller;
 
 
 import java.util.ArrayList;
@@ -75,7 +75,10 @@ public class MainController {
                     case 1: getAllUsers(currentUser.getToken());
                         break;
 
-                    case 2: deleteUser();
+                    case 2: System.out.println("BrugerID");
+
+                        int userID = sc.nextInt();
+                        deleteUser(currentUser.getToken(), userID);
                         break;
 
                     case 3: createUser();
@@ -112,7 +115,7 @@ public class MainController {
                     case 2: changeUserProfile();
                         break;
 
-                    case 3: deleteUser();
+                    case 3: deleteUser(currentUser.getToken(), currentUser.getUserID());
                         break;
 
                     case 4: logout(currentUser.getToken());
@@ -144,7 +147,11 @@ public class MainController {
     private void createUser() {
     }
 
-    private void deleteUser() {
+    private void deleteUser(String token, int userID) throws IOException {
+
+
+
+        uc.deleteUser(token, userID);
     }
 
     public void logout(String token) throws IOException{

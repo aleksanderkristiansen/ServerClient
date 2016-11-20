@@ -1,8 +1,8 @@
-package company.sdk.controller;
+package company.controller;
 
 import com.google.gson.stream.JsonReader;
-import company.sdk.Encrypters.Crypter;
-import company.sdk.ServerConnection;
+import company.sdk.encryption.Crypter;
+import company.sdk.connection.ServerConnection;
 import company.sdk.model.Book;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

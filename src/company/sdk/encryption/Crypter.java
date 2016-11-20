@@ -1,4 +1,4 @@
-package company.sdk.Encrypters;
+package company.sdk.encryption;
 
 /**
  * Created by Tastum on 17/10/2016.

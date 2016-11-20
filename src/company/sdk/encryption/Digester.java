@@ -1,4 +1,4 @@
-package company.sdk.Encrypters;
+package company.sdk.encryption;
 
 import java.security.MessageDigest;
 
