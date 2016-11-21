@@ -38,6 +38,13 @@ public class Book {
         this.publisher = publisher;
     }
 
+    public Book(String title, int version, double ISBN, int publisherID){
+        this.title = title;
+        this.ISBN = ISBN;
+        this.version = version;
+        this.publisherID = publisherID;
+    }
+
     public int getBookID() {
         return bookID;
     }

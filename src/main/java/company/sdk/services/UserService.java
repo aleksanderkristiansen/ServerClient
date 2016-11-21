@@ -7,7 +7,6 @@ import company.sdk.connection.ResponseParser;
 import company.sdk.connection.ServerConnection;
 import company.sdk.encryption.Crypter;
 import company.sdk.encryption.Digester;
-import company.sdk.model.Message;
 import company.sdk.model.User;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;

@@ -200,8 +200,6 @@ public class MainController {
             listOfSelectedAuthors.add(selectedAuthor);
         }
 
-
-
         System.out.println("\nForlag du kan vælge i mellem");
 
         this.bookService.getPublishers(new ResponseCallback<ArrayList<Publisher>>() {
@@ -219,8 +217,6 @@ public class MainController {
         System.out.println("\nVælg ID på forlag");
 
         int publisherId = sc.nextInt();
-
-
 
         this.bookService.getBookstores(new ResponseCallback<ArrayList<BookStore>>() {
             public void success(ArrayList<BookStore> data) {
@@ -255,6 +251,18 @@ public class MainController {
 
 
         }
+
+        Book book = new Book(title, version, isbn, publisherId);
+
+        bookService.createBook(listOfSelectedAuthors, listOfSelectedBookstores, book, new ResponseCallback<String>() {
+            public void success(String data) {
+                System.out.print("Bogen er oprettet");
+            }
+
+            public void error(int status) {
+
+            }
+        });
 
     }
 

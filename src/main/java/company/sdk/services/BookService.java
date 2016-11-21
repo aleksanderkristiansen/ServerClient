@@ -31,23 +31,27 @@ public class BookService {
 
         HttpPost postRequest = new HttpPost(ServerConnection.serverURL + "/book");
 
-        String authorsS = this.gson.toJson(listOfAuthors);
+        ArrayList<Object> bookDataList = new ArrayList<Object>();
 
-        String authorsC = Crypter.encryptDecryptXOR(authorsS);
+        for (Author author : listOfAuthors){
+            bookDataList.add(author);
+        }
 
-        String bookStoresS = this.gson.toJson(listOfBookStores);
+        for (BookStore bookStore : listOfBookStores){
+            bookDataList.add(bookStore);
+        }
 
-        String bookStoresC = Crypter.encryptDecryptXOR(bookStoresS);
+        bookDataList.add(book);
 
-        String bookS = this.gson.toJson(book);
+        String bookDataListS = this.gson.toJson(bookDataList);
 
-        String bookC = Crypter.encryptDecryptXOR(bookS);
+        String bookDataListC = Crypter.encryptDecryptXOR(bookDataListS);
 
         try{
 
-            StringEntity userString = new StringEntity(authorsC, bookStoresC, bookC);
+            StringEntity bookString = new StringEntity(bookDataListC);
 
-            postRequest.setEntity(userString);
+            postRequest.setEntity(bookString);
             postRequest.setHeader("Content-Type", "application/json");
 
             this.connection.execute(postRequest, new ResponseParser() {
@@ -85,7 +89,7 @@ public class BookService {
     }
 
     public void getBookstores(final ResponseCallback<ArrayList<BookStore>> responseCallback){
-        HttpGet getRequest = new HttpGet(ServerConnection.serverURL + "/book/authors");
+        HttpGet getRequest = new HttpGet(ServerConnection.serverURL + "/book/bookstores");
 
         this.connection.execute(getRequest, new ResponseParser() {
             public void payload(String json) {
