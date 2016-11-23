@@ -60,6 +60,22 @@ public class BookService {
 
     }
 
+    public void getBook(int id, final ResponseCallback<Book> responseCallback){
+        HttpGet getRequest = new HttpGet(ServerConnection.serverURL + "/book/" + id);
+
+        this.connection.execute(getRequest, new ResponseParser() {
+            public void payload(String json) {
+                String bookC = Crypter.encryptDecryptXOR(json);
+                Book book = gson.fromJson(bookC, Book.class);
+                responseCallback.success(book);
+            }
+
+            public void error(int status) {
+                responseCallback.error(status);
+            }
+        });
+    }
+
 
     public void getAuthors(final ResponseCallback<ArrayList<Author>> responseCallback){
         HttpGet getRequest = new HttpGet(ServerConnection.serverURL + "/book/authors");

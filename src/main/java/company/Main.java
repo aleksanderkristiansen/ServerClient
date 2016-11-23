@@ -17,14 +17,6 @@ public class Main {
         MainController mc = new MainController(){};
 
         mc.run();
-
-
-
-
-
-
-
-
         }
 
 }

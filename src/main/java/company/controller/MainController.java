@@ -3,56 +3,38 @@ package company.controller;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.IOException;
 
 import company.sdk.connection.ResponseCallback;
 import company.sdk.model.*;
 import company.sdk.services.BookService;
 import company.sdk.services.CurriculumService;
 import company.sdk.services.UserService;
+import company.view.AdminView;
+import company.view.GuestView;
+import company.view.UserView;
 
 /**
  * Created by aleksanderkristiansen on 24/10/2016.
  */
 public class MainController {
-
-    /*BookController bc = new BookController();
-    UserController uc = new UserController();
-    CurriculumController cc = new CurriculumController();*/
     Scanner sc = new Scanner(System.in);
     private UserService userService = new UserService();
     private BookService bookService = new BookService();
     private CurriculumService curriculumService = new CurriculumService();
+    private GuestView guestView;
+    private AdminView adminView;
+    private UserView userView;
 
     public MainController(){
-        this.userService = new UserService();
+        this.guestView = new GuestView(this);
+        this.adminView = new AdminView(this);
+        this.userView = new UserView(this);
     }
 
 
-    public void run() throws IOException {
+    public void run(){
 
-            System.out.println("Velkommen til Bookit" +
-                    "\nHvad vil du?" +
-                    "\n1: Find pensumliste" +
-                    "\n2: Log ind" +
-                    "\n3: Opret bruger");
-
-            int i = sc.nextInt();
-
-            switch (i){
-
-                case 1: findCurriculum();
-                    break;
-
-                case 2: login();
-                    break;
-
-                case 3: createUser();
-                    break;
-
-                default: //findCurriculum();
-                    break;
-            }
+        guestView.guestView();
 
     }
 
@@ -70,70 +52,12 @@ public class MainController {
 
 
                     if (currentUser.getUserType()){
-                        System.out.println("Du er logget ind som administrator" +
-                                "\nHvad vil du?" +
-                                "\n1: Se alle brugere" +
-                                "\n2: Slet en bruger" +
-                                "\n3: Opret en bruger" +
-                                "\n4: Opret en bog" +
-                                "\n5: Ændre profiloplysninger" +
-                                "\n6: Log ud");
 
-                        int i = sc.nextInt();
+                        adminView.adminView(currentUser);
 
-                        switch (i){
-
-                            case 1: getAllUsers(currentUser.getToken());
-                                break;
-
-                            case 2: System.out.println("BrugerID");
-
-                                int userID = sc.nextInt();
-                                deleteUser(currentUser.getToken(), userID);
-                                break;
-
-                            case 3: createUser();
-                                break;
-
-                            case 4: createBook();
-                                break;
-
-                            case 5: changeUserProfile(currentUser);
-                                break;
-
-                            case 6: //logout(currentUser.getToken());
-                                break;
-
-                            default:
-                                break;
-                        }
 
                     }else{
-                        System.out.println("Hej " + currentUser.getFirstName() +
-                                "\nHvad vil du?" +
-                                "\n1: Se din pensumliste" +
-                                "\n2: Ændre profiloplysninger" +
-                                "\n3: Slet profil" +
-                                "\n4: Log ud");
-
-                        int i = sc.nextInt();
-
-                        switch (i){
-
-                            case 1: //curriculumOfUser();
-                                break;
-
-                            case 2: //changeUserProfile();
-                                break;
-
-                            case 3: deleteUser(currentUser.getToken(), currentUser.getUserID());
-                                break;
-
-                            case 4: //logout(currentUser.getToken());
-
-                            default:
-                                break;
-                        }
+                        userView.userView(currentUser);
                     }
 
             }
@@ -150,7 +74,7 @@ public class MainController {
 
     }
 
-   private void changeUserProfile(User currentUser) {
+   public void changeUserProfile(User currentUser) {
 
        boolean endEditUser = false;
        String firstName = null;
@@ -158,7 +82,7 @@ public class MainController {
        String email = null;
        String password = null;
        boolean userType = false;
-       int userID = 0;
+       int userID;
 
        User user;
 
@@ -226,13 +150,13 @@ public class MainController {
            int i = sc.nextInt();
 
            switch (i) {
-               case 1: firstName = sc.nextLine();
+               case 1: firstName = sc.next();
                    break;
-               case 2: lastName = sc.nextLine();
+               case 2: lastName = sc.next();
                    break;
-               case 3: email = sc.nextLine();
+               case 3: email = sc.next();
                    break;
-               case 4: password = sc.nextLine();
+               case 4: password = sc.next();
                    break;
            }
        }
@@ -267,7 +191,7 @@ public class MainController {
 
     */
 
-    private void createBook() {
+    public void createBook() {
 
         System.out.println("Title på bog");
 
@@ -378,7 +302,7 @@ public class MainController {
 
 
 
-    private void createUser() {
+    public void createUser() {
 
         System.out.println("Navn");
 
@@ -429,7 +353,7 @@ public class MainController {
 
 
 
-    private void deleteUser(String token, int userID) {
+    public void deleteUser(String token, int userID) {
         this.userService.deleteUser(userID, token, new ResponseCallback<String>() {
             public void success(String message) {
                 System.out.println(message);
@@ -440,17 +364,22 @@ public class MainController {
             }
         });
     }
-/*
-    public void logout(String token) throws IOException{
 
-        System.out.print(token);
+    public void logout(String token){
+        userService.logOut(token, new ResponseCallback<String>() {
+            public void success(String data) {
+                guestView.guestView();
+            }
 
-        uc.logout(token);
+            public void error(int status) {
+
+            }
+        });
 
 
 
 
-    } */
+    }
 
     public void getAllUsers(String token){
 
@@ -479,7 +408,7 @@ public class MainController {
                 + "\n" + "Email : " + uc.getUser(token, id).getEmail());
     }
 */
-    public void findCurriculum() throws IOException {
+    public void findCurriculum(){
 
         this.curriculumService.getCurriculums(new ResponseCallback<ArrayList<Curriculum>>() {
             public void success(ArrayList<Curriculum> data) {
@@ -532,7 +461,7 @@ public class MainController {
                         curriculumService.getCurriculumBooks(books.getCurriculumID(), new ResponseCallback<ArrayList<Book>>() {
                             public void success(ArrayList<Book> data) {
                                 ArrayList<Book> curriculumBooks = new ArrayList<Book>();
-                                String bookAuthors = null;
+                                String bookAuthors;
 
                                 for (Book book : data){
                                     if (curriculumBooks.isEmpty()){
@@ -556,12 +485,40 @@ public class MainController {
                                         }
                                     }
                                 }
-                                int k = 0;
+                                System.out.printf("%-7s %-55s %-20s\n", "Nr.", "Title", "Billigste pris");
                                 for (Book bookPrint: curriculumBooks){
-                                    System.out.printf("%-7d %-55s %-70s %-20.0f %-55s %-20.0f\n", k,  bookPrint.getTitle(), bookPrint.getAuthor(), bookPrint.getISBN(), bookPrint.getPublisher(), bookPrint.getPrice());
-                                    k++;
+                                    System.out.printf("%-7d %-55s %-20.0f\n", bookPrint.getBookID() ,  bookPrint.getTitle(), bookPrint.getPrice());
                                 }
 
+                                int selectedBook = 1;
+
+                                while (selectedBook != 0){
+                                    System.out.println("Se mere om bog (indtast nr. på bog eller 0 for at afslutte");
+                                    selectedBook = sc.nextInt();
+                                    if (selectedBook !=0){
+                                        bookService.getBook(selectedBook, new ResponseCallback<Book>() {
+                                            public void success(Book data) {
+                                                System.out.println("Title: " + data.getTitle());
+                                                System.out.printf("ISBN: %-20.0f\n", data.getISBN());
+                                                System.out.println("Version: " + data.getVersion());
+                                                System.out.println("Forlag: " + data.getPublisher());
+                                                System.out.println("Forfattere");
+                                                for (Author author : data.getLstAuthors()){
+                                                    System.out.println(author.getName());
+                                                }
+                                                System.out.println("Forhandler og pris");
+                                                for (BookStore bookstore : data.getLstBookStores()){
+                                                    System.out.println(bookstore.getName() + " " + bookstore.getPriceOfBook());
+                                                }
+                                            }
+
+                                            public void error(int status) {
+
+                                            }
+                                        });
+                                    }
+
+                                }
 
                             }
 

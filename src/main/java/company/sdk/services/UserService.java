@@ -174,8 +174,26 @@ public class UserService {
         }
     }
 
-    public static void logOut(){
-        //AuthService.clear();
+    public void logOut(String token, final ResponseCallback<String> responseCallback){
+        HttpPost postRequest = new HttpPost(ServerConnection.serverURL + "/user/logout");
+        try {
+            StringEntity loginInfo = new StringEntity(token);
+            postRequest.setEntity(loginInfo);
+            postRequest.setHeader("Content-Type", "application/json");
+
+            this.connection.execute(postRequest, new ResponseParser() {
+                public void payload(String json) {
+                    responseCallback.success(json);
+                }
+                public void error(int status) {
+                    responseCallback.error(status);
+                }
+            });
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     /*public static User current(){
