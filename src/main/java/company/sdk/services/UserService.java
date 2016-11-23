@@ -11,6 +11,7 @@ import company.sdk.model.User;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -29,6 +30,39 @@ public class UserService {
         this.connection = new ServerConnection();
         this.gson = new Gson();
     }
+
+    public void editUser(String token, User user, int id, final ResponseCallback<String> responseCallback){
+
+        HttpPut putRequest = new HttpPut(ServerConnection.serverURL + "/user/"+id);
+
+        String userS = this.gson.toJson(user);
+
+        String userC = Crypter.encryptDecryptXOR(userS);
+
+        try{
+
+            StringEntity userString = new StringEntity(userC);
+
+            putRequest.setEntity(userString);
+            putRequest.setHeader("Content-Type", "application/json");
+            putRequest.setHeader("authorization", token);
+
+            this.connection.execute(putRequest, new ResponseParser() {
+                public void payload(String json) {
+                    responseCallback.success(json);
+                }
+
+                public void error(int status) {
+                    responseCallback.error(status);
+                }
+            });
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public void login(String email, String password, final ResponseCallback<User> responseCallback){
 
@@ -138,8 +172,6 @@ public class UserService {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static void logOut(){

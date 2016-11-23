@@ -27,29 +27,18 @@ public class BookService {
         this.gson = new Gson();
     }
 
-    public void createBook(ArrayList<Author> listOfAuthors, ArrayList<BookStore> listOfBookStores, Book book, final ResponseCallback<String> responseCallback){
+    public void createBook(Book book, final ResponseCallback<String> responseCallback){
 
         HttpPost postRequest = new HttpPost(ServerConnection.serverURL + "/book");
 
-        ArrayList<Object> bookDataList = new ArrayList<Object>();
 
-        for (Author author : listOfAuthors){
-            bookDataList.add(author);
-        }
+        String bookS = this.gson.toJson(book);
 
-        for (BookStore bookStore : listOfBookStores){
-            bookDataList.add(bookStore);
-        }
-
-        bookDataList.add(book);
-
-        String bookDataListS = this.gson.toJson(bookDataList);
-
-        String bookDataListC = Crypter.encryptDecryptXOR(bookDataListS);
+        String bookC = Crypter.encryptDecryptXOR(bookS);
 
         try{
 
-            StringEntity bookString = new StringEntity(bookDataListC);
+            StringEntity bookString = new StringEntity(bookC);
 
             postRequest.setEntity(bookString);
             postRequest.setHeader("Content-Type", "application/json");

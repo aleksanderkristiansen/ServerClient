@@ -1,5 +1,7 @@
 package company.sdk.model;
 
+import java.util.ArrayList;
+
 public class Book {
 
     private int bookID;
@@ -10,6 +12,10 @@ public class Book {
     private String author;
     private double price;
     private int version;
+    private ArrayList<Author> lstAuthors;
+    private ArrayList<BookStore> lstBookStores;
+
+
 
     public Book(int bookID, String publisher, String title, String author, int version, double ISBN, double price) {
         this.bookID = bookID;
@@ -38,12 +44,15 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Book(String title, int version, double ISBN, int publisherID){
+    public Book(String title, int version, double ISBN, int publisherID, ArrayList<Author> lstAuthors, ArrayList<BookStore> lstBookStores){
         this.title = title;
         this.ISBN = ISBN;
         this.version = version;
         this.publisherID = publisherID;
+        this.lstAuthors = lstAuthors;
+        this.lstBookStores = lstBookStores;
     }
+
 
     public int getBookID() {
         return bookID;
@@ -107,6 +116,22 @@ public class Book {
 
     public void setPublisherID(int publisherID) {
         this.publisherID = publisherID;
+    }
+
+    public ArrayList<Author> getLstAuthors() {
+        return lstAuthors;
+    }
+
+    public void setLstAuthors(ArrayList<Author> lstAuthors) {
+        this.lstAuthors = lstAuthors;
+    }
+
+    public ArrayList<BookStore> getLstBookStores() {
+        return lstBookStores;
+    }
+
+    public void setLstBookStores(ArrayList<BookStore> lstBookStores) {
+        this.lstBookStores = lstBookStores;
     }
 
 

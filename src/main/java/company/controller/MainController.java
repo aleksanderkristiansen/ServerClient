@@ -8,6 +8,7 @@ import java.io.IOException;
 import company.sdk.connection.ResponseCallback;
 import company.sdk.model.*;
 import company.sdk.services.BookService;
+import company.sdk.services.CurriculumService;
 import company.sdk.services.UserService;
 
 /**
@@ -21,6 +22,7 @@ public class MainController {
     Scanner sc = new Scanner(System.in);
     private UserService userService = new UserService();
     private BookService bookService = new BookService();
+    private CurriculumService curriculumService = new CurriculumService();
 
     public MainController(){
         this.userService = new UserService();
@@ -39,7 +41,7 @@ public class MainController {
 
             switch (i){
 
-                case 1: //findCurriculum();
+                case 1: findCurriculum();
                     break;
 
                 case 2: login();
@@ -96,7 +98,7 @@ public class MainController {
                             case 4: createBook();
                                 break;
 
-                            case 5: //changeUserProfile();
+                            case 5: changeUserProfile(currentUser);
                                 break;
 
                             case 6: //logout(currentUser.getToken());
@@ -148,9 +150,117 @@ public class MainController {
 
     }
 
-/*    private void changeUserProfile() {
+   private void changeUserProfile(User currentUser) {
+
+       boolean endEditUser = false;
+       String firstName = null;
+       String lastName = null;
+       String email = null;
+       String password = null;
+       boolean userType = false;
+       int userID = 0;
+
+       User user;
+
+       if (currentUser.getUserType()){
+           System.out.println("Hvilken bruger ønsker du at ændre?");
+           userService.getAll(currentUser.getToken(), new ResponseCallback<ArrayList<User>>() {
+               public void success(ArrayList<User> data) {
+                   for (User user : data){
+                       System.out.println(user.getUserID() + ": " + user.getEmail());
+                   }
+               }
+
+               public void error(int status) {
+
+               }
+           });
+
+           userID = sc.nextInt();
+
+           while (!endEditUser) {
+
+               System.out.println("Hvad vil du gerne ændre?");
+               System.out.println("1: Fornavn");
+               System.out.println("2: Efternavn");
+               System.out.println("3: E-mail");
+               System.out.println("4: Adgangskode");
+               System.out.println("5: Brugertype");
+               System.out.println("6: Afslut");
+
+               int choice = sc.nextInt();
+
+               switch (choice) {
+                   case 1: firstName = sc.next();
+                       break;
+                   case 2: lastName = sc.next();
+                       break;
+                   case 3: email = sc.next();
+                       break;
+                   case 4: password = sc.next();
+                       break;
+                   case 5: int j = sc.nextInt();
+                       if (j == 1){
+                           userType = true;
+                       }
+                       break;
+                   case 6: endEditUser = true;
+                       break;
+                   default: endEditUser = true;
+                       break;
+               }
+
+           }
+
+       }else{
+
+           userID = currentUser.getUserID();
+
+
+           System.out.println("Hvad vil du gerne ændre?");
+           System.out.println("1: Fornavn");
+           System.out.println("2: Efternavn");
+           System.out.println("3: E-mail");
+           System.out.println("4: Adgangskode");
+
+           int i = sc.nextInt();
+
+           switch (i) {
+               case 1: firstName = sc.nextLine();
+                   break;
+               case 2: lastName = sc.nextLine();
+                   break;
+               case 3: email = sc.nextLine();
+                   break;
+               case 4: password = sc.nextLine();
+                   break;
+           }
+       }
+
+
+
+       user = new User(firstName, lastName, email,password,userType);
+
+       userService.editUser(currentUser.getToken(), user, userID, new ResponseCallback<String>() {
+           public void success(String data) {
+
+           }
+
+           public void error(int status) {
+
+           }
+       });
+
+
+
+
+
+
+
+
     }
 
+    /*
     private void curriculumOfUser(){
 
     }
@@ -252,9 +362,9 @@ public class MainController {
 
         }
 
-        Book book = new Book(title, version, isbn, publisherId);
+        Book book = new Book(title, version, isbn, publisherId, listOfSelectedAuthors, listOfSelectedBookstores);
 
-        bookService.createBook(listOfSelectedAuthors, listOfSelectedBookstores, book, new ResponseCallback<String>() {
+        bookService.createBook(book, new ResponseCallback<String>() {
             public void success(String data) {
                 System.out.print("Bogen er oprettet");
             }
@@ -368,142 +478,105 @@ public class MainController {
                 + "\n" + "Efternavn:" + uc.getUser(token, id).getLastName()
                 + "\n" + "Email : " + uc.getUser(token, id).getEmail());
     }
-
+*/
     public void findCurriculum() throws IOException {
 
-        ArrayList<String> schools = new ArrayList();
-
-        for (int i = 0; i < cc.getAllCurriculums().size(); i++){
-            boolean foundSchool = schools.contains(cc.getAllCurriculums().get(i).getSchool());
-
-            if (!foundSchool){
-                schools.add(cc.getAllCurriculums().get(i).getSchool());
-            }
-        }
-
-        for (int i = 0; i < schools.size(); i++){
-            System.out.println(i + ": " + schools.get(i));
-        }
-
-        int selectedSchool = sc.nextInt();
-
-        ArrayList<String> educations = new ArrayList();
-
-        for (int i = 0; i < cc.getAllCurriculums().size(); i++){
-
-            boolean foundEducation = educations.contains(cc.getAllCurriculums().get(i).getEducation());
-
-            if (!foundEducation){
-
-                if (cc.getAllCurriculums().get(i).getSchool().equals(schools.get(selectedSchool))){
-
-                    educations.add(cc.getAllCurriculums().get(i).getEducation());
-                }
-
-            }
+        this.curriculumService.getCurriculums(new ResponseCallback<ArrayList<Curriculum>>() {
+            public void success(ArrayList<Curriculum> data) {
+                ArrayList<String> schools = new ArrayList();
+                ArrayList<String> educations = new ArrayList();
+                ArrayList<Integer> semesters = new ArrayList();
 
 
-        }
-
-        for (int i = 0; i < educations.size(); i++){
-            System.out.println(i + ": " + educations.get(i));
-        }
-
-        int selectedEducation = sc.nextInt();
-
-        ArrayList<Integer> semester = new ArrayList();
-
-        for (int i = 0; i < cc.getAllCurriculums().size(); i++){
-            if (cc.getAllCurriculums().get(i).getEducation().equals(educations.get(selectedEducation))){
-                semester.add(cc.getAllCurriculums().get(i).getSemester());
-            }
-        }
-
-        for (int i = 0; i < semester.size(); i++){
-            System.out.println(i + ": " + semester.get(i));
-        }
-
-        int selectedSemester = sc.nextInt();
-
-        System.out.printf("%-7s %-55s %-70s %-20s %-55s %-20s\n", "Nr.",  "Book title:", "Book Author", "Book ISBN", "Book Publisher", "Cheapest price ");
-
-        ArrayList<Book> bookOfCurriculum = new ArrayList<Book>();
-
-        for (int i = 0; i < cc.getAllCurriculums().size(); i++){
-
-            if (cc.getAllCurriculums().get(i).getSchool().equals(schools.get(selectedSchool)) && cc.getAllCurriculums().get(i).getEducation().equals(educations.get(selectedEducation)) && cc.getAllCurriculums().get(i).getSemester() == semester.get(selectedSemester)){
-
-                for (int j = 0; j < cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).size(); j++){
-
-
-
-                    String bookTitle = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle();
-
-                    String bookAuthor = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor();
-
-                    double isbn = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN();
-
-                    double price = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPrice();
-
-                    String bookPublisher = cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPublisher();
-
-                    Book book = new Book(bookTitle, bookAuthor, isbn, price, bookPublisher);
-
-                    if (bookOfCurriculum.isEmpty()){
-                        bookOfCurriculum.add(book);
-                    }else{
-                        for (Book bookSearch: bookOfCurriculum ){
-
-                            if (bookSearch.getPrice() > price){
-                                bookSearch.setPrice(price);
-                            }
-
-                            if (bookSearch.getTitle().equals(bookTitle)){
-
-                                if (!bookSearch.getAuthor().contains(bookAuthor)){
-                                    bookAuthor = bookSearch.getAuthor() + " & " + bookAuthor;
-                                    bookSearch.setAuthor(bookAuthor);
-                                    break;
-                                }
-                                break;
-                            }
-                        }
+                for (Curriculum school : data){
+                    if (!schools.contains(school)){
+                        schools.add(school.getSchool());
                     }
+                }
+
+                for (String school : schools){
+                    System.out.println(schools.indexOf(school) + ": " + school);
+                }
+
+                System.out.println("Vælg skole");
+                int selectedSchool = sc.nextInt();
+
+                for (Curriculum education : data){
+                    if (education.getSchool().equals(schools.get(selectedSchool)) && !educations.contains(education.getEducation())){
+                        educations.add(education.getEducation());
+                    }
+                }
+
+                for (String education : educations){
+                    System.out.println(educations.indexOf(education) + ": " + education);
+                }
+
+                System.out.println("Vælg uddannelse");
+                int selectedEducation = sc.nextInt();
+
+                for (Curriculum semester : data){
+                    if (semester.getSchool().equals(schools.get(selectedSchool)) && semester.getEducation().equals(educations.get(selectedEducation))){
+                        semesters.add(semester.getSemester());
+                    }
+                }
+
+                for (int semester : semesters){
+                    System.out.println(semesters.indexOf(semester) + ": " + semester);
+                }
+
+                System.out.println("Vælg semester");
+                int selectedSemester = sc.nextInt();
+
+                for (Curriculum books : data){
+                    if (books.getSchool().equals(schools.get(selectedSchool)) && books.getEducation().equals(educations.get(selectedEducation)) && books.getSemester() == semesters.get(selectedSemester)){
+                        curriculumService.getCurriculumBooks(books.getCurriculumID(), new ResponseCallback<ArrayList<Book>>() {
+                            public void success(ArrayList<Book> data) {
+                                ArrayList<Book> curriculumBooks = new ArrayList<Book>();
+                                String bookAuthors = null;
+
+                                for (Book book : data){
+                                    if (curriculumBooks.isEmpty()){
+                                        curriculumBooks.add(book);
+                                    }else{
+                                        for (Book bookSearch: curriculumBooks ){
+
+                                            if (bookSearch.getPrice() > book.getPrice()){
+                                                bookSearch.setPrice(book.getPrice());
+                                            }
+
+                                            if (bookSearch.getTitle().equals(book.getTitle())){
+
+                                                if (!bookSearch.getAuthor().contains(book.getAuthor())){
+                                                    bookAuthors = bookSearch.getAuthor() + " & " + book.getAuthor();
+                                                    bookSearch.setAuthor(bookAuthors);
+                                                    break;
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                int k = 0;
+                                for (Book bookPrint: curriculumBooks){
+                                    System.out.printf("%-7d %-55s %-70s %-20.0f %-55s %-20.0f\n", k,  bookPrint.getTitle(), bookPrint.getAuthor(), bookPrint.getISBN(), bookPrint.getPublisher(), bookPrint.getPrice());
+                                    k++;
+                                }
 
 
+                            }
 
-                        //System.out.printf("%-7d %-55s %-70s %-20.0f\n", j,  cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getTitle(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getAuthor(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getISBN(), cc.getCurriculumsBooks(cc.getAllCurriculums().get(i).getCurriculumID()).get(j).getPublisher());
+                            public void error(int status) {
 
+                            }
+                        });
 
+                    }
                 }
             }
-        }
 
-        int k =1;
+            public void error(int status) {
 
-        for (Book bookPrint: bookOfCurriculum){
-            System.out.printf("%-7d %-55s %-70s %-20.0f %-55s %-20.0f\n", k,  bookPrint.getTitle(), bookPrint.getAuthor(), bookPrint.getISBN(), bookPrint.getPublisher(), bookPrint.getPrice());
-            k++;
-        }
-
-
-
-
-
-
-
-
-    }*/
-
-
-
-
-
-
-
-
-
-
-
-
+            }
+        });
+    }
 }
