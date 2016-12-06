@@ -5,3 +5,4 @@ lib
 web
 config.json
 target
+*.MF
