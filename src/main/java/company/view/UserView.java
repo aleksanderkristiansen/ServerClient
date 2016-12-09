@@ -16,35 +16,41 @@ public class UserView {
         this.mainController = mainController;
     }
 
+
+
     public void userView(User currentUser){
-        System.out.println("Hej " + currentUser.getFirstName() +
-                "\nHvad vil du?" +
-                "\n1: Se din pensumliste" +
-                "\n2: Ændre profiloplysninger" +
-                "\n3: Slet profil" +
-                "\n4: Log ud");
+        boolean stop = false;
+        while (!stop){
+            System.out.println("\n Hej " + currentUser.getFirstName() + " - hvad vil du?" +
+                    "\n1: Se din pensumliste" +
+                    "\n2: Ændre profiloplysninger" +
+                    "\n3: Slet profil" +
+                    "\n4: Log ud");
+            try{
+                sc = new Scanner(System.in);
+                int i = sc.nextInt();
 
-        int i = sc.nextInt();
+                switch (i) {
 
-        switch (i) {
+                    case 1: //mainController.curriculumOfUser();
+                        break;
 
-            case 1: //mainController.curriculumOfUser();
-                userView(currentUser);
-                break;
+                    case 2: mainController.changeUserProfile(currentUser);
+                        break;
 
-            case 2: mainController.changeUserProfile(currentUser);
-                userView(currentUser);
-                break;
+                    case 3: mainController.deleteUser(currentUser.getToken(), currentUser.getUserID());
+                        break;
 
-            case 3: mainController.deleteUser(currentUser.getToken(), currentUser.getUserID());
-                userView(currentUser);
-                break;
+                    case 4: mainController.logout(currentUser.getToken());
+                        stop = true;
+                        break;
 
-            case 4: mainController.logout(currentUser.getToken());
-                break;
-
-            default: mainController.logout(currentUser.getToken());
-                break;
+                    default: System.out.println(i + " er ikke en mulighed, prøv igen");
+                        break;
+                }
+            }catch (Exception exception){
+                System.out.println("Ukendt værdi indtastet, prøv igen");
+            }
         }
     }
 }

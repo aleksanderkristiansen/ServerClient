@@ -368,7 +368,7 @@ public class MainController {
     public void logout(String token){
         userService.logOut(token, new ResponseCallback<String>() {
             public void success(String data) {
-                guestView.guestView();
+                System.out.println("Du er logget ud");
             }
 
             public void error(int status) {

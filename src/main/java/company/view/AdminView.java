@@ -11,55 +11,55 @@ import java.util.Scanner;
 public class AdminView {
     Scanner sc = new Scanner(System.in);
     MainController mainController;
-    GuestView guestView;
 
     public AdminView(MainController mainController){
         this.mainController = mainController;
-        this.guestView = guestView;
-
     }
 
     public void adminView(User currentUser){
-        System.out.println("Du er logget ind som administrator" +
-                "\nHvad vil du?" +
-                "\n1: Se alle brugere" +
-                "\n2: Slet en bruger" +
-                "\n3: Opret en bruger" +
-                "\n4: Opret en bog" +
-                "\n5: Ændre profiloplysninger" +
-                "\n6: Log ud");
+        boolean stop = false;
+        while (!stop){
+            System.out.println("\nAdministratormenu - hvad vil du?" +
+                    "\n1: Se alle brugere" +
+                    "\n2: Slet en bruger" +
+                    "\n3: Opret en bruger" +
+                    "\n4: Opret en bog" +
+                    "\n5: Ændre profiloplysninger" +
+                    "\n6: Log ud");
 
-        int i = sc.nextInt();
+            try{
+                sc = new Scanner(System.in);
+                int i = sc.nextInt();
 
-        switch (i){
+                switch (i){
 
-            case 1: mainController.getAllUsers(currentUser.getToken());
-                adminView(currentUser);
-                break;
+                    case 1: mainController.getAllUsers(currentUser.getToken());
+                        break;
 
-            case 2: System.out.println("BrugerID");
-                int userID = sc.nextInt();
-                mainController.deleteUser(currentUser.getToken(), userID);
-                adminView(currentUser);
-                break;
+                    case 2: System.out.println("BrugerID");
+                        int userID = sc.nextInt();
+                        mainController.deleteUser(currentUser.getToken(), userID);
+                        break;
 
-            case 3: mainController.createUser();
-                adminView(currentUser);
-                break;
+                    case 3: mainController.createUser();
+                        break;
 
-            case 4: mainController.createBook();
-                adminView(currentUser);
-                break;
+                    case 4: mainController.createBook();
+                        break;
 
-            case 5: mainController.changeUserProfile(currentUser);
-                adminView(currentUser);
-                break;
+                    case 5: mainController.changeUserProfile(currentUser);
+                        break;
 
-            case 6: mainController.logout(currentUser.getToken());
-                break;
+                    case 6: mainController.logout(currentUser.getToken());
+                        stop = true;
+                        break;
 
-            default: mainController.logout(currentUser.getToken());
-                break;
+                    default: System.out.println(i + " er ikke en mulighed, prøv igen");
+                        break;
+                }
+            }catch (Exception exception){
+                System.out.println("Ukendt værdi indtastet, prøv igen");
+            }
         }
     }
 }
