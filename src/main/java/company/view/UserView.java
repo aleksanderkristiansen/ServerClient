@@ -21,8 +21,8 @@ public class UserView {
     public void userView(User currentUser){
         boolean stop = false;
         while (!stop){
-            System.out.println("\n Hej " + currentUser.getFirstName() + " - hvad vil du?" +
-                    "\n1: Se din pensumliste" +
+            System.out.println("\nHej " + currentUser.getFirstName() + " - hvad vil du?" +
+                    "\n1: Find din pensumliste" +
                     "\n2: Ændre profiloplysninger" +
                     "\n3: Slet profil" +
                     "\n4: Log ud");
@@ -32,7 +32,7 @@ public class UserView {
 
                 switch (i) {
 
-                    case 1: //mainController.curriculumOfUser();
+                    case 1: mainController.findCurriculum();
                         break;
 
                     case 2: mainController.changeUserProfile(currentUser);

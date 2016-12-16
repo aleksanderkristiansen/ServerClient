@@ -3,6 +3,7 @@ package company.controller;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.SynchronousQueue;
 
 import company.sdk.connection.ResponseCallback;
 import company.sdk.model.*;
@@ -17,7 +18,7 @@ import company.view.UserView;
  * Created by aleksanderkristiansen on 24/10/2016.
  */
 public class MainController {
-    Scanner sc = new Scanner(System.in);
+    Scanner sc= new Scanner(System.in);
     private UserService userService = new UserService();
     private BookService bookService = new BookService();
     private CurriculumService curriculumService = new CurriculumService();
@@ -62,16 +63,9 @@ public class MainController {
 
             }
 
-            public void error(int status) {
-                System.out.println("Darn it, something went wrong, error: " + status);
+            public void error(int status){
             }
         });
-
-
-
-
-
-
     }
 
    public void changeUserProfile(User currentUser) {
@@ -140,24 +134,34 @@ public class MainController {
 
            userID = currentUser.getUserID();
 
+           while (!endEditUser) {
 
-           System.out.println("Hvad vil du gerne ændre?");
-           System.out.println("1: Fornavn");
-           System.out.println("2: Efternavn");
-           System.out.println("3: E-mail");
-           System.out.println("4: Adgangskode");
+               System.out.println("\nHvad vil du gerne ændre?");
+               System.out.println("1: Fornavn");
+               System.out.println("2: Efternavn");
+               System.out.println("3: E-mail");
+               System.out.println("4: Adgangskode");
 
-           int i = sc.nextInt();
+               int i = sc.nextInt();
 
-           switch (i) {
-               case 1: firstName = sc.next();
-                   break;
-               case 2: lastName = sc.next();
-                   break;
-               case 3: email = sc.next();
-                   break;
-               case 4: password = sc.next();
-                   break;
+               switch (i) {
+                   case 1:
+                       System.out.println("\nIndtast fornavn");
+                       firstName = sc.next();
+                       break;
+                   case 2:
+                       System.out.println("\nIndtast efternavn");
+                       lastName = sc.next();
+                       break;
+                   case 3:
+                       System.out.println("\nIndtast e-mail");
+                       email = sc.next();
+                       break;
+                   case 4:
+                       System.out.println("\nIndtast adgangskode");
+                       password = sc.next();
+                       break;
+               }
            }
        }
 
@@ -174,14 +178,6 @@ public class MainController {
 
            }
        });
-
-
-
-
-
-
-
-
     }
 
     /*
@@ -195,7 +191,7 @@ public class MainController {
 
         System.out.println("Title på bog");
 
-        String title = sc.next();
+        String title = sc.nextLine();
 
         System.out.println("Version");
 
@@ -239,7 +235,7 @@ public class MainController {
         this.bookService.getPublishers(new ResponseCallback<ArrayList<Publisher>>() {
             public void success(ArrayList<Publisher> data) {
                 for(Publisher publisher : data){
-                    System.out.println(publisher.getId() + " : " + publisher.getName());
+                    System.out.println(publisher.getId() + ": " + publisher.getName());
                 }
             }
 
@@ -251,6 +247,8 @@ public class MainController {
         System.out.println("\nVælg ID på forlag");
 
         int publisherId = sc.nextInt();
+
+        System.out.println("\nBoghandlere du kan vælge i mellem");
 
         this.bookService.getBookstores(new ResponseCallback<ArrayList<BookStore>>() {
             public void success(ArrayList<BookStore> data) {
@@ -290,13 +288,15 @@ public class MainController {
 
         bookService.createBook(book, new ResponseCallback<String>() {
             public void success(String data) {
-                System.out.print("Bogen er oprettet");
+                System.out.println("Bogen er oprettet");
             }
 
             public void error(int status) {
 
             }
         });
+
+        sc.nextLine();
 
     }
 
@@ -399,15 +399,6 @@ public class MainController {
 
     }
 
-    /*
-
-    public void getUser(String token, int id) throws IOException {
-
-        System.out.println("Fornavn: " + uc.getUser(token, id).getFirstName()
-                + "\n" + "Efternavn:" + uc.getUser(token, id).getLastName()
-                + "\n" + "Email : " + uc.getUser(token, id).getEmail());
-    }
-*/
     public void findCurriculum(){
 
         this.curriculumService.getCurriculums(new ResponseCallback<ArrayList<Curriculum>>() {
@@ -493,7 +484,7 @@ public class MainController {
                                 int selectedBook = 1;
 
                                 while (selectedBook != 0){
-                                    System.out.println("Se mere om bog (indtast nr. på bog eller 0 for at afslutte");
+                                    System.out.println("Se mere om bog (indtast nr. på bog eller 0 for at afslutte)");
                                     selectedBook = sc.nextInt();
                                     if (selectedBook !=0){
                                         bookService.getBook(selectedBook, new ResponseCallback<Book>() {
@@ -502,13 +493,13 @@ public class MainController {
                                                 System.out.printf("ISBN: %-20.0f\n", data.getISBN());
                                                 System.out.println("Version: " + data.getVersion());
                                                 System.out.println("Forlag: " + data.getPublisher());
-                                                System.out.println("Forfattere");
+                                                System.out.println("Forfattere: ");
                                                 for (Author author : data.getLstAuthors()){
-                                                    System.out.println(author.getName());
+                                                    System.out.println(" " + author.getName());
                                                 }
                                                 System.out.println("Forhandler og pris");
                                                 for (BookStore bookstore : data.getLstBookStores()){
-                                                    System.out.println(bookstore.getName() + " " + bookstore.getPriceOfBook());
+                                                    System.out.println(" " + bookstore.getName() + " " + bookstore.getPriceOfBook());
                                                 }
                                             }
 
